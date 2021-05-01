@@ -91,7 +91,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
               return Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.red,
-                  title: Text("Assignment Tabs"),
+                  title: Text("Assignments Tab"),
                 ),
                 body: ds == null
                     ? Container(

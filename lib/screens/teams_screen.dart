@@ -16,9 +16,6 @@ class TeamsState extends State<TeamsPage> {
   @override
   void initState() {
     getUserData();
-    setState(() {
-      store;
-    });
     super.initState();
   }
 
@@ -27,6 +24,7 @@ class TeamsState extends State<TeamsPage> {
         .collection('user_info')
         .doc(auth.currentUser.uid)
         .get();
+    setState(() {});
   }
 
   @override
@@ -36,7 +34,8 @@ class TeamsState extends State<TeamsPage> {
       child: MaterialApp(
           home: store == null
               ? Container(
-                  child: CircularProgressIndicator(),
+                  color: Colors.white,
+                  child: Center(child: CircularProgressIndicator()),
                 )
               : Scaffold(
                   drawer: Drawer(
