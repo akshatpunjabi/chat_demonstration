@@ -1,5 +1,4 @@
-import 'package:chat_demonstration/screens/otp_UI.dart';
-import 'package:chat_demonstration/screens/student_info_screen.dart';
+import 'package:chat_demonstration/screens/teams_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +21,14 @@ class _InstructorInfoScreenState extends State<InstructorInfoScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final CollectionReference address =
-      FirebaseFirestore.instance.collection('instructor_user_info');
+      FirebaseFirestore.instance.collection('user_info');
   Future updateUserData() async {
     return await address.doc(loggedInUser.uid).set({
       'firstName': firstName,
       'lastName': lastName,
       'teaching_ID': teachID,
       'Email': widget.email,
+      'isInstructor': true,
     });
   }
 
@@ -153,11 +153,8 @@ class _InstructorInfoScreenState extends State<InstructorInfoScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Processing Data')));
                       await updateUserData();
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InfoScreen(
-                                  PinCodeVerificationScreen.phoneNumber)));
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => TeamsPage()));
                     }
                   },
                   child: Text('Submit'),

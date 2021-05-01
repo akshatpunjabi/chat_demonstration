@@ -6,34 +6,39 @@ final orgName = 'MIT';
 final _fireStore = FirebaseFirestore.instance;
 User currentUser;
 ScrollController _scrollController = ScrollController();
+DocumentSnapshot store;
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
-  String subjectName;
-  ChatScreen(String subject) {
+  DocumentSnapshot userData;
+  ChatScreen(String subject, DocumentSnapshot userData) {
+    this.userData = userData;
     subjectName = subject;
   }
+  String subjectName;
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  FirebaseAuth auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    currentUser = auth.currentUser;
-    super.initState();
-  }
 
   final messageTextController = TextEditingController();
   String messageText;
+
+  @override
+  void initState() {
+    currentUser = FirebaseAuth.instance.currentUser;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              MessagesStream(widget.subjectName),
+              MessagesStream(widget.subjectName, widget.userData),
               Container(
                 padding: EdgeInsets.only(bottom: 10, right: 5, left: 15),
                 decoration: BoxDecoration(
@@ -115,9 +120,11 @@ class _ChatScreenState extends State<ChatScreen> {
                               .collection('messages' + widget.subjectName)
                               .add({
                             'text': messageText,
-                            'sender': currentUser == null
-                                ? 'hey'
-                                : currentUser.phoneNumber,
+                            'sender': widget.userData.data()['firstName'] +
+                                " " +
+                                widget.userData.data()['lastName'],
+                            'isInstructor':
+                                widget.userData.data()['isInstructor'],
                             'date': DateTime.now().toIso8601String().toString(),
                           });
                           //messageText + loggedInUser.email
@@ -137,7 +144,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class MessagesStream extends StatelessWidget {
   String subjectName;
-  MessagesStream(String subject) {
+  DocumentSnapshot userData;
+  MessagesStream(String subject, DocumentSnapshot userData) {
+    this.userData = userData;
     subjectName = subject;
   }
   @override
@@ -165,11 +174,15 @@ class MessagesStream extends StatelessWidget {
         for (var message in messages) {
           final messageText = message.data()['text'];
           final messageSender = message.data()['sender'];
-
+          final isInstructor = message.data()['isInstructor'];
           final messageBubble = MessageBubble(
+            isInstructor: isInstructor,
             sender: messageSender,
             text: messageText,
-            isMe: currentUser.phoneNumber == messageSender,
+            isMe: userData.data()['firstName'] +
+                    " " +
+                    userData.data()['lastName'] ==
+                messageSender,
           );
           messageBubbles.add(messageBubble);
         }
@@ -188,8 +201,8 @@ class MessagesStream extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text, this.isMe});
-
+  MessageBubble({this.sender, this.text, this.isMe, this.isInstructor});
+  bool isInstructor;
   final bool isMe;
   final String sender;
   final String text;
@@ -211,7 +224,7 @@ class MessageBubble extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: isInstructor ? Colors.blue : Colors.grey.shade100,
                 border: Border.all(color: Colors.black12)),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),

@@ -44,7 +44,8 @@ class BndBox extends StatelessWidget {
           h = _h * scaleH;
           if (_y < difH / 2) h -= (difH / 2 - _y) * scaleH;
         }
-        if (re["detectedClass"].toString() == "person") {
+        if (re["detectedClass"].toString() == "person" &&
+            (re["confidenceInClass"] > 0.5)) {
           return Positioned(
             left: math.max(0, x),
             top: math.max(0, y),
@@ -68,12 +69,38 @@ class BndBox extends StatelessWidget {
               ),
             ),
           );
+        } else if (re["detectedClass"].toString() == "laptop" &&
+            (re["confidenceInClass"] > 0.5)) {
+          return Positioned(
+            left: math.max(0, x),
+            top: math.max(0, y),
+            width: w,
+            height: h,
+            child: Container(
+              padding: EdgeInsets.only(top: 5.0, left: 5.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Color.fromRGBO(37, 213, 253, 1.0),
+                  width: 3.0,
+                ),
+              ),
+              child: Text(
+                "NO PERSON FOUND",
+                style: TextStyle(
+                  color: Color.fromRGBO(37, 213, 253, 1.0),
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          );
         } else {
           return Positioned(
             left: math.max(0, 0),
             top: math.max(0, 0),
             width: 0,
             height: 0,
+            child: Container(),
           );
         }
       }).toList();

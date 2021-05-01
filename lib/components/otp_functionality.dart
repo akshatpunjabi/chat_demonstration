@@ -1,5 +1,7 @@
 import 'package:chat_demonstration/screens/student_info_screen.dart';
 import 'package:chat_demonstration/screens/student_login_screen.dart';
+import 'package:chat_demonstration/screens/teams_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +23,20 @@ void registerUser(String mobile, BuildContext context) {
             .then((UserCredential result) {
           User user = result.user;
           //user.updatePhoneNumberCredential(authCredential);
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => InfoScreen(mobile)));
+          var store =
+              FirebaseFirestore.instance.collection('user_info').doc(user.uid);
+
+          store.get().then((DocumentSnapshot documentSnapshot) {
+            if (documentSnapshot.exists) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => TeamsPage()));
+            } else {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => StudentInfoScreen(mobile)));
+            }
+          });
         }).catchError((e) {});
       },
       verificationFailed: (FirebaseAuthException authException) {

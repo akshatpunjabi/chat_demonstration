@@ -42,6 +42,12 @@ dependencies:
   meta:
   tflite:
   path:
+  flutter_plugin_pdf_viewer: ^1.0.7
+  file_picker: ^1.13.0+1
+  firebase_storage:
+  firebase_database:
+  fluttertoast: ^8.0.6
+  url_launcher: ^6.0.3
 
 
 

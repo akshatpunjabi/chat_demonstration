@@ -38,7 +38,8 @@ class IndexState extends State<IndexPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agora Flutter QuickStart'),
+        backgroundColor: Colors.red,
+        title: Text('Join a channel'),
       ),
       body: Center(
         child: Container(
@@ -98,7 +99,7 @@ class IndexState extends State<IndexPage> {
                       child: RaisedButton(
                         onPressed: onJoin,
                         child: Text('Join'),
-                        color: Colors.blueAccent,
+                        color: Colors.deepOrangeAccent,
                         textColor: Colors.white,
                       ),
                     )
