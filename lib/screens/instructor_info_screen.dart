@@ -87,7 +87,7 @@ class _InstructorInfoScreenState extends State<InstructorInfoScreen> {
                       borderSide: BorderSide(color: Colors.blue),
                     ),
                     counterText: '',
-                    prefixIcon: Icon(Icons.perm_identity),
+                    prefixIcon: Icon(Icons.perm_contact_cal),
                     prefixStyle: TextStyle(
                       fontSize: 20,
                       color: Color(0xFF7E808C),
@@ -135,29 +135,47 @@ class _InstructorInfoScreenState extends State<InstructorInfoScreen> {
                   },
                 ),
               ),
-              Text(
-                widget.email,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
+              Card(
+                elevation: 10,
+                color: Colors.transparent,
+                child: Text(
+                  widget.email,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Processing Data')));
-                      await updateUserData();
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => TeamsPage()));
-                    }
-                  },
-                  child: Text('Submit'),
+                padding: const EdgeInsets.all(30.0),
+                child: SizedBox(
+                  height: 70,
+                  width: 200,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        if (_formKey.currentState.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              duration: Duration(seconds: 2),
+                              content: Text('Processing Data')));
+                          await updateUserData();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TeamsPage(),
+                              ));
+                        }
+                      },
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],

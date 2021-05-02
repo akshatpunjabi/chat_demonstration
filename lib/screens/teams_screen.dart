@@ -82,23 +82,30 @@ class TeamsState extends State<TeamsPage> {
                                 fontWeight: FontWeight.w400),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () async {
-                            await FirebaseAuth.instance.signOut();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => WelcomeScreen(),
-                                ));
-                          },
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.power_settings_new,
-                              color: Colors.red,
-                            ),
-                            title: Text(
-                              "Sign Out",
-                              style: TextStyle(color: Colors.red),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 50.0),
+                          child: GestureDetector(
+                            onTap: () async {
+                              await FirebaseAuth.instance.signOut();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => WelcomeScreen(),
+                                  ));
+                            },
+                            child: Card(
+                              elevation: 5,
+                              color: Colors.white,
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.power_settings_new,
+                                  color: Colors.red,
+                                ),
+                                title: Text(
+                                  "Sign Out",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
                             ),
                           ),
                         ),

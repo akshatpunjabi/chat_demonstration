@@ -47,6 +47,10 @@ class _NotesPageState extends State<NotesPage> {
     docref.update({
       widget.subjectName: FieldValue.arrayUnion([url])
     });
+    Fluttertoast.showToast(
+      msg: "Upload Successful!",
+      toastLength: Toast.LENGTH_SHORT,
+    );
   }
 
   @override

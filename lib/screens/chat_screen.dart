@@ -35,109 +35,123 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.red,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.subjectName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              orgName,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              MessagesStream(widget.subjectName, widget.userData),
-              Container(
-                padding: EdgeInsets.only(bottom: 10, right: 5, left: 15),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.black12, width: 2.0),
+    return Stack(
+      children: [
+        SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Image.asset(
+              'images/chat.jpg',
+              fit: BoxFit.fill,
+            )),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.red,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.subjectName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 18,
                   ),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Form(
-                          key: _formKey,
-                          child: TextFormField(
-                            controller: messageTextController,
-                            onChanged: (value) {
-                              messageText = value;
-                            },
-                            validator: (val) {
-                              if (val.trim().length == 0) {
-                                return "The message cannot be empty";
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: "Enter your message here",
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(),
+                Text(
+                  orgName,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          body: SafeArea(
+            child: Container(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  MessagesStream(widget.subjectName, widget.userData),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 10, right: 5, left: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border(
+                        top: BorderSide(color: Colors.black12, width: 2.0),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                controller: messageTextController,
+                                onChanged: (value) {
+                                  messageText = value;
+                                },
+                                validator: (val) {
+                                  if (val.trim().length == 0) {
+                                    return "The message cannot be empty";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  labelText: "Enter your message here",
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                        IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              _scrollController.animateTo(
+                                0.0,
+                                curve: Curves.easeOut,
+                                duration: const Duration(milliseconds: 200),
+                              );
+                              messageTextController.clear();
+                              _fireStore
+                                  .collection('messages' + widget.subjectName)
+                                  .add({
+                                'text': messageText,
+                                'sender': widget.userData.data()['firstName'] +
+                                    " " +
+                                    widget.userData.data()['lastName'],
+                                'isInstructor':
+                                    widget.userData.data()['isInstructor'],
+                                'date':
+                                    DateTime.now().toIso8601String().toString(),
+                              });
+                              //messageText + loggedInUser.email
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: Icon(Icons.send),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _scrollController.animateTo(
-                            0.0,
-                            curve: Curves.easeOut,
-                            duration: const Duration(milliseconds: 200),
-                          );
-                          messageTextController.clear();
-                          _fireStore
-                              .collection('messages' + widget.subjectName)
-                              .add({
-                            'text': messageText,
-                            'sender': widget.userData.data()['firstName'] +
-                                " " +
-                                widget.userData.data()['lastName'],
-                            'isInstructor':
-                                widget.userData.data()['isInstructor'],
-                            'date': DateTime.now().toIso8601String().toString(),
-                          });
-                          //messageText + loggedInUser.email
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -225,6 +239,7 @@ class MessageBubble extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
                 color: isInstructor ? Colors.blue : Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: Colors.black12)),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),

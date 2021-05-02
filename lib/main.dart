@@ -1,10 +1,11 @@
 import 'package:camera/camera.dart';
+import 'package:chat_demonstration/screens/teams_screen.dart';
 import 'package:chat_demonstration/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/home.dart';
+import 'screens/exam_home_page.dart';
 
 List<CameraDescription> cameras;
 
@@ -38,7 +39,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: user != null ? WelcomeScreen() : WelcomeScreen(),
+      home: user != null ? TeamsPage() : WelcomeScreen(),
       routes: {
         HomePage.id: (context) => HomePage(cameras),
       },

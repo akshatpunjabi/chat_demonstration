@@ -47,6 +47,10 @@ class _AssignmentPageState extends State<AssignmentPage> {
     docref.update({
       widget.subjectName: FieldValue.arrayUnion([url])
     });
+    Fluttertoast.showToast(
+      msg: "Upload Successful!",
+      toastLength: Toast.LENGTH_SHORT,
+    );
   }
 
   @override
@@ -74,8 +78,9 @@ class _AssignmentPageState extends State<AssignmentPage> {
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             Fluttertoast.showToast(
-                msg: "Error: ${snapshot.error}",
-                toastLength: Toast.LENGTH_SHORT);
+              msg: "Error: ${snapshot.error}",
+              toastLength: Toast.LENGTH_SHORT,
+            );
             return Container();
           }
           switch (snapshot.connectionState) {

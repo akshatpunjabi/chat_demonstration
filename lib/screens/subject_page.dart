@@ -1,10 +1,11 @@
 import 'package:chat_demonstration/screens/chat_screen.dart';
+import 'package:chat_demonstration/screens/user_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../index.dart';
 import 'assignment_page.dart';
-import 'home.dart';
+import 'exam_home_page.dart';
 import 'notes_page.dart';
 
 class SubjectPage extends StatefulWidget {
@@ -152,6 +153,30 @@ class SubjectPageState extends State<SubjectPage> {
             ),
           ),
         ),
+        widget.userData.data()['isInstructor']
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.deepPurpleAccent),
+                    ),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => UserList()));
+                    },
+                    child: Text(
+                      "User Database",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox(),
       ],
     ));
   }

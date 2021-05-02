@@ -16,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
-                'images/2.jpg',
+                'images/welcome.jpg',
                 fit: BoxFit.fill,
               )),
           Scaffold(
