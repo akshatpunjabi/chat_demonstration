@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import './call.dart';
+import 'videocall.dart';
 
 class IndexPage extends StatefulWidget {
   static const String id = 'index_page';

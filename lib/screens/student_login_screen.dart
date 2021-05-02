@@ -16,7 +16,7 @@ class LoginScreenState extends State<LoginScreen> {
   String input;
   double deviceHeight, deviceWidth;
   bool length = false;
-  static GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -123,7 +123,7 @@ class LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         number = '+91$input';
-                        registerUser(number, context);
+                        registerUser(number, context,scaffoldKey);
                       }
                     },
                     minWidth: 20.0,

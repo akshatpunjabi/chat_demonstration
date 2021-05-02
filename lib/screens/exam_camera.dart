@@ -4,7 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
 
-import 'models.dart';
+import '../utils/models.dart';
 
 typedef void Callback(List<dynamic> list, int h, int w);
 

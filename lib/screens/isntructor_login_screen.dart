@@ -26,6 +26,13 @@ class _InstructorLoginScreenState extends State<InstructorLoginScreen> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Image.asset(
+              'images/student.jpg',
+              fit: BoxFit.fill,
+            )),
+        SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Image.asset(
               'images/teacher.jpg',
               fit: BoxFit.fill,
             )),

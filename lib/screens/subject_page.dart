@@ -3,10 +3,10 @@ import 'package:chat_demonstration/screens/user_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../index.dart';
 import 'assignment_page.dart';
 import 'exam_home_page.dart';
 import 'notes_page.dart';
+import 'video_channel_screen.dart';
 
 class SubjectPage extends StatefulWidget {
   String subjectName;

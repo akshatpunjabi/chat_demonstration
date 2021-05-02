@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import '../screens/authentication_screen.dart';
 import '../screens/otp_UI.dart';
 
-void registerUser(String mobile, BuildContext context) {
+void registerUser(String mobile, BuildContext context,GlobalKey<ScaffoldState> scaffoldKey) {
+
   FirebaseAuth _auth = FirebaseAuth.instance;
 //  final _codeController = TextEditingController();
 //  String smsCode;
@@ -49,7 +50,7 @@ void registerUser(String mobile, BuildContext context) {
         } else
           text =
               'You have reached the limit of OTP texts for this Mobile Number.Try a different Number or wait for a few hours.';
-        LoginScreenState.scaffoldKey.currentState.showSnackBar(SnackBar(
+        scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text(
             text,
             style: TextStyle(color: Colors.red),

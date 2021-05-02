@@ -4,9 +4,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
 
-import '../bndbox.dart';
-import '../camera.dart';
-import '../models.dart';
+import '../components/bndbox.dart';
+import '../utils/models.dart';
+import 'exam_camera.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home_page';

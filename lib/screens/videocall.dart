@@ -1,19 +1,25 @@
 import 'dart:async';
+
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
-import 'utils/settings.dart';
+
+import '../utils/settings.dart';
+
 class CallPage extends StatefulWidget {
   /// non-modifiable channel name of the page
   final String channelName;
+
   /// non-modifiable client role of the page
   final ClientRole role;
+
   /// Creates a call page with given channel name.
   const CallPage({Key key, this.channelName, this.role}) : super(key: key);
   @override
   _CallPageState createState() => _CallPageState();
 }
+
 class _CallPageState extends State<CallPage> {
   final _users = <int>[];
   final _infoStrings = <String>[];
@@ -28,12 +34,14 @@ class _CallPageState extends State<CallPage> {
     _engine.destroy();
     super.dispose();
   }
+
   @override
   void initState() {
     super.initState();
 // initialize agora sdk
     initialize();
   }
+
   Future<void> initialize() async {
     if (APP_ID.isEmpty) {
       setState(() {
@@ -52,6 +60,7 @@ class _CallPageState extends State<CallPage> {
     await _engine.setVideoEncoderConfiguration(configuration);
     await _engine.joinChannel(Token, widget.channelName, null, 0);
   }
+
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
     _engine = await RtcEngine.create(APP_ID);
@@ -59,6 +68,7 @@ class _CallPageState extends State<CallPage> {
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(widget.role);
   }
+
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
     _engine.setEventHandler(RtcEngineEventHandler(error: (code) {
@@ -95,6 +105,7 @@ class _CallPageState extends State<CallPage> {
       });
     }));
   }
+
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
     final List<StatefulWidget> list = [];
@@ -104,10 +115,12 @@ class _CallPageState extends State<CallPage> {
     _users.forEach((int uid) => list.add(RtcRemoteView.SurfaceView(uid: uid)));
     return list;
   }
+
   /// Video view wrapper
   Widget _videoView(view) {
     return Expanded(child: Container(child: view));
   }
+
   /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
     final wrappedViews = views.map<Widget>(_videoView).toList();
@@ -117,6 +130,7 @@ class _CallPageState extends State<CallPage> {
       ),
     );
   }
+
   /// Video layout wrapper
   Widget _viewRows() {
     final views = _getRenderViews();
@@ -124,36 +138,37 @@ class _CallPageState extends State<CallPage> {
       case 1:
         return Container(
             child: Column(
-              children: <Widget>[_videoView(views[0])],
-            ));
+          children: <Widget>[_videoView(views[0])],
+        ));
       case 2:
         return Container(
             child: Column(
-              children: <Widget>[
-                _expandedVideoRow([views[0]]),
-                _expandedVideoRow([views[1]])
-              ],
-            ));
+          children: <Widget>[
+            _expandedVideoRow([views[0]]),
+            _expandedVideoRow([views[1]])
+          ],
+        ));
       case 3:
         return Container(
             child: Column(
-              children: <Widget>[
-                _expandedVideoRow(views.sublist(0, 2)),
-                _expandedVideoRow(views.sublist(2, 3))
-              ],
-            ));
+          children: <Widget>[
+            _expandedVideoRow(views.sublist(0, 2)),
+            _expandedVideoRow(views.sublist(2, 3))
+          ],
+        ));
       case 4:
         return Container(
             child: Column(
-              children: <Widget>[
-                _expandedVideoRow(views.sublist(0, 2)),
-                _expandedVideoRow(views.sublist(2, 4))
-              ],
-            ));
+          children: <Widget>[
+            _expandedVideoRow(views.sublist(0, 2)),
+            _expandedVideoRow(views.sublist(2, 4))
+          ],
+        ));
       default:
     }
     return Container();
   }
+
   /// Toolbar layout
   Widget _toolbar() {
     if (widget.role == ClientRole.Audience) return Container();
@@ -203,6 +218,7 @@ class _CallPageState extends State<CallPage> {
       ),
     );
   }
+
   /// Info panel to show logs
   Widget _panel() {
     return Container(
@@ -252,23 +268,28 @@ class _CallPageState extends State<CallPage> {
       ),
     );
   }
+
   void _onCallEnd(BuildContext context) {
     Navigator.pop(context);
   }
+
   void _onToggleMute() {
     setState(() {
       muted = !muted;
     });
     _engine.muteLocalAudioStream(muted);
   }
+
   void _onSwitchCamera() {
     _engine.switchCamera();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agora Flutter QuickStart'),
+        backgroundColor: Colors.red,
+        title: Text('Current Session'),
       ),
       backgroundColor: Colors.black,
       body: Center(
